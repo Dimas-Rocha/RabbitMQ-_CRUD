@@ -8,7 +8,7 @@ private Long userId;
 private String userEmail;
 private LocalDateTime timestamp;
 
-public UserEvent() {}
+public UserEvent(String string, Long long1, String string2) {}
 
 public UserEvent(String type, Long userId, String userEmail, LocalDateTime timestamp) {
 	

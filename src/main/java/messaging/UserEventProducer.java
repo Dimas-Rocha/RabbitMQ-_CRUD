@@ -1,5 +1,8 @@
 package messaging;
 
+import static config.RabbitMQConfig.EXCHANGE_NAME;
+import static config.RabbitMQConfig.ROUTING_KEY;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,7 +16,7 @@ public class UserEventProducer {
 
 	private RabbitTemplate rabbitTemplate;
 
-	public void sendUserEvent(UserEvent event) {
+	public static void sendUserEvent(UserEvent event) {
 		try {
 			rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, event);
 			logger.info("Evento enviado para RabbitMQ: {}", event);

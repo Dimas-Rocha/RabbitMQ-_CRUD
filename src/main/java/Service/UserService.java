@@ -12,6 +12,7 @@ import dto.UserEvent;
 import dto.UserRequest;
 import dto.UserResponse;
 import model.User;
+import messaging.UserEventProducer;
 
 @Service
 @Transactional
@@ -21,7 +22,7 @@ public class UserService {
 
 	public UserResponse createdUser(UserRequest request) {
 		if (userRepository.existsByEmail(request.getEmail())) {
-			throw new RunTimeException("Email ja esta em uso: " + request.getEmail());
+			throw new Exception("Email ja esta em uso: " + request.getEmail());
 		}
 
 		User user = new User();
@@ -32,8 +33,8 @@ public class UserService {
 		
            //PUBLICAR EVENTO
 		
-		UserEvent event = new UserEvent("CREATED", savedUser.getId(), savedUser.getEmail());
-		eventProducer.sendUserEvent(event);
+		UserEvent event = new UserEvent("CREATED", savedUser.getId(), savedUser.getEmail(), null);
+		UserEventProducer.sendUserEvent(event);
 		return mapToResponse(savedUser);
 
 	}
@@ -65,7 +66,7 @@ public class UserService {
 	User updateUser = userRepository.save(user);
 	 
 	UserEvent event = new UserEvent("UPDATE", updateUser.getId(), updateUser.getEmail());
-	eventProducer.sendUserEvent(event);
+	UserEventProducer.sendUserEvent(event);
 	return mapToResponse(updateUser);
 	}
 
